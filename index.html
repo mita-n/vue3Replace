@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width-device-width">
+
+        <title>fxck</title>
+
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300" rel="stylesheet">
+        <link rel="stylesheet" href="css/style.css">
+    </head>
+    <body>
+            <div class="container">
+                <iframe width="100%" height="300"
+                    allow="autoplay" 
+                    src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/1206609112&color=%23ff5500&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true&visual=true">
+                </iframe>
+                    <div style="font-size: 10px; color: #cccccc;line-break: anywhere;word-break: normal;overflow: hidden;white-space: nowrap;text-overflow: ellipsis; font-family: Interstate,Lucida Grande,Lucida Sans Unicode,Lucida Sans,Garuda,Verdana,Tahoma,sans-serif;font-weight: 100;">
+                    <a href="https://soundcloud.com/mitannooheya" title="ωmitanω" target="_blank" style="color: #cccccc; text-decoration: none;">ωmitanω</a>
+                    <a href="https://soundcloud.com/mitannooheya/filth" title="filth" target="_blank" style="color: #cccccc; text-decoration: none;">filth</a></div>
+            <div id="img_unit">
+                <div class="photo" v-for="Photo in Photos">
+                    <img v-bind:src="Photo.path">
+                    <div class="inner"><p>{{Photo.caption}}<span>{{Photo.name}}</span></p>
+                </div>
+            </div>
+
+        </div><!-- container -->
+
+        <script src="https://unpkg.com/vue@3.1.5"></script>
+        <script src="https://unpkg.com/axios@0.21.1/dist/axios.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.js"></script>
+        <script>
+            const app = Vue.createApp({
+                data : () => ({
+                    Photos: []
+                }),
+                created: function() {
+                    this.message = 'Loading...'
+                    let vm = this
+                    axios({
+                        method:'get',
+                        url: 'images.json'
+                    })
+                    .then(function(response){
+                        //console.log(response)
+                        vm.Photos = response.data
+                    })
+                    //catchでエラーの場合の処理
+                    .catch(function(error){
+                        vm.Photos = '' + error
+                    })
+                    //finalyで最終処理(メッセージを空にする)
+                    .finally(function(){
+                        vm.message = ''
+                    })
+                }
+            })
+            app.mount("#img_unit")
+        </script>
+    </body>
+    </html>
